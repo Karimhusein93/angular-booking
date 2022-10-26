@@ -8,6 +8,7 @@ import { FlightService } from '../flight.service';
 })
 export class BookFlightComponent implements OnInit {
   flight:any;
+  minDate: Date = new Date();
   country:string = 'RO';
   currency:string = 'EUR';
   locale:string = 'en-GB';
