@@ -8,12 +8,12 @@
             matInput
             aria-label="Place"
             [matAutocomplete]="auto"
-            [formControl]="placeId"
+            [formControl]="originPlace"
           />
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option
-              *ngFor="let place of getFilteredList() | async"
-              [value]="place.PlaceName"
+              *ngFor="let place of getOriginFilteredList() | async"
+              [value]="place"
             >
               <span>{{ place.PlaceName }}</span>
             </mat-option>
@@ -28,12 +28,12 @@
             matInput
             aria-label="Place"
             [matAutocomplete]="auto"
-            [formControl]="placeId"
+            [formControl]="destinationPlace"
           />
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option
-              *ngFor="let place of getFilteredList() | async"
-              [value]="place.PlaceName"
+              *ngFor="let place of getDestinationFilteredList() | async"
+              [value]="place" 
             >
               <span>{{ place.PlaceName }}</span>
             </mat-option>

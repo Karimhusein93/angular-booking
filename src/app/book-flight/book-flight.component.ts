@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
@@ -16,31 +17,17 @@ export class BookFlightComponent implements OnInit {
   country: string = 'RO';
   currency: string = 'EUR';
   locale: string = 'en-GB';
-  originPlace: string = '';
-  destinationPlace: string = '';
+  originPlace = new FormControl('');
+  destinationPlace = new FormControl('');
   outboundPartialDate: Date = new Date();
   inboundPartialDate: any;
   locationList: Location;
-  placeId = new FormControl('');
   filteredPlaces: Observable<Places[]>;
   placesEmptyList: Location[] = [];
 
-  constructor(private service: FlightService) {}
+  constructor(private service: FlightService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {}
-
-  getFlight() {
-    var flight = {
-      country: this.country,
-      currency: this.currency,
-      locale: this.locale,
-      originPlace: this.originPlace,
-      destinationPlace: this.destinationPlace,
-      outboundPartialDate: this.outboundPartialDate,
-      inboundPartialDate: this.inboundPartialDate,
-    };
-    this.service.getFlight(flight).subscribe();
-  }
 
   private _filterPlaces(value: string): any {
     const filterValue = value.toLowerCase();
@@ -62,8 +49,8 @@ export class BookFlightComponent implements OnInit {
       return this.placesEmptyList;
     }
   }
-  getFilteredList(): any {
-    this.filteredPlaces = this.placeId.valueChanges.pipe(
+  getOriginFilteredList(): any {
+    this.filteredPlaces = this.originPlace.valueChanges.pipe(
       startWith(''),
       map((state) =>
         state ? this._filterPlaces(state) : this.locationList?.Places?.slice()
@@ -71,5 +58,31 @@ export class BookFlightComponent implements OnInit {
     );
     return this.filteredPlaces;
   }
-  searchFlight() {}
+  getDestinationFilteredList(): any {
+    this.filteredPlaces = this.destinationPlace.valueChanges.pipe(
+      startWith(''),
+      map((state) =>
+        state ? this._filterPlaces(state) : this.locationList?.Places?.slice()
+      )
+    );
+    return this.filteredPlaces;
+  }
+  searchFlight() {
+    var flight = {
+      country: this.country,
+      currency: this.currency,
+      locale: this.locale,
+      originPlace: this.originPlace,
+      destinationPlace: this.destinationPlace,
+      outboundPartialDate: this.datePipe.transform(
+        this.outboundPartialDate,
+        'yyyy-MM-dd'
+      ),
+      inboundPartialDate:
+        this.inboundPartialDate !== undefined || null
+          ? this.datePipe.transform(this.inboundPartialDate, 'yyyy-MM-dd')
+          : null,
+    };
+    this.service.getFlight(flight).subscribe();
+  }
 }

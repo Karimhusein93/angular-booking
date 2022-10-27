@@ -15,14 +15,14 @@ export class FlightService {
 
   getFlight(data: any) {
     return this.http.get(
-      this.flightUrl +
-        `${data.country}` +
-        `${data.currency}` +
-        `${data.locale}` +
-        `${data.originPlace}` +
-        `${data.destinationPlace}` +
-        `${data.outboundPartialDate}` +
-        `${data?.inboundPartialDate}`
+      this.flightUrl + '/' +
+        `${data.country}`  + '/' +
+        `${data.currency}`  + '/' +
+        `${data.locale}`  + '/' +
+        `${data.originPlace}` + '/' +
+        `${data.destinationPlace}` + '/' +
+        `${data.outboundPartialDate}` + '/' +
+        `${data?.inboundPartialDate}`+'?apiKey=' + this.apiKey
     );
   }
   getLocations(data: any) : Observable<Location> {

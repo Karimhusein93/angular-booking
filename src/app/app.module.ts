@@ -22,6 +22,7 @@ import { MatSelectModule} from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { DatePipe} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -48,9 +49,9 @@ import { FormsModule } from '@angular/forms';
     MatSelectModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
-  providers: [FlightService],
+  providers: [FlightService, DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
