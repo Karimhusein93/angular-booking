@@ -4,42 +4,84 @@
       <div class="col-sm-2">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Origin</mat-label>
-          <input matInput type="text" class="form-control" />
+          <input
+            matInput
+            aria-label="Place"
+            [matAutocomplete]="auto"
+            [formControl]="placeId"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let place of getFilteredList() | async"
+              [value]="place.PlaceName"
+            >
+              <span>{{ place.PlaceName }}</span>
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
 
       <div class="col-sm-2">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Destination</mat-label>
-          <input matInput type="text" class="form-control" />
+          <input
+            matInput
+            aria-label="Place"
+            [matAutocomplete]="auto"
+            [formControl]="placeId"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let place of getFilteredList() | async"
+              [value]="place.PlaceName"
+            >
+              <span>{{ place.PlaceName }}</span>
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
 
       <div class="col-sm-3">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Select departure date</mat-label>
-          <input matInput [min]="minDate" [matDatepicker]="picker" />
+          <input
+            matInput
+            [matDatepicker]="outboundPicker"
+            [min]="minDate"
+            placeholder="Select departure date"
+            [(ngModel)]="outboundPartialDate"
+            [ngModelOptions]="{standalone: true}"
+          />
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"
+            [for]="outboundPicker"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #outboundPicker></mat-datepicker>
         </mat-form-field>
       </div>
 
       <div class="col-sm-3">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Select return date</mat-label>
-          <input matInput [min]="minDate" [matDatepicker]="picker" />
+          <input
+            matInput
+            [matDatepicker]="inboundPicker"
+            [min]="minDate"
+            placeholder="Select return date"
+            [(ngModel)]="inboundPartialDate"
+            [ngModelOptions]="{standalone: true}"
+          />
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"
+            [for]="inboundPicker"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #inboundPicker></mat-datepicker>
         </mat-form-field>
       </div>
       <div class="col-sm-2">
-        <button type="button" class="btn btn-warning align-middle">Search</button>
+        <button type="button" class="btn btn-warning align-middle" (click)="searchFlight()">
+          Search
+        </button>
       </div>
     </div>
   </mat-card>

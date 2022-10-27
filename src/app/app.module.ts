@@ -18,6 +18,10 @@ import { ContactComponent } from './contact/contact.component';
 import { OffersComponent } from './offers/offers.component';
 import { DestinationsComponent } from './destinations/destinations.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule} from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -40,7 +44,11 @@ import { MatCardModule } from '@angular/material/card';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [FlightService],
   bootstrap: [AppComponent],

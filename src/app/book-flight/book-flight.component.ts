@@ -1,36 +1,75 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
 import { FlightService } from '../flight.service';
+import { Location } from '../location';
+import { Places } from '../places';
 
 @Component({
   selector: 'app-book-flight',
   templateUrl: './book-flight.component.html',
-  styleUrls: ['./book-flight.component.css']
+  styleUrls: ['./book-flight.component.css'],
 })
 export class BookFlightComponent implements OnInit {
-  flight:any;
-  minDate: Date = new Date();
-  country:string = 'RO';
-  currency:string = 'EUR';
-  locale:string = 'en-GB';
-  originPlace:string = '';
-  destinationPlace:string = '';
-  outboundPartialDate :Date = new Date();
-  inboundPartialDate :Date = new Date();
+  flight: any;
+  minDate = new Date();
+  country: string = 'RO';
+  currency: string = 'EUR';
+  locale: string = 'en-GB';
+  originPlace: string = '';
+  destinationPlace: string = '';
+  outboundPartialDate: Date = new Date();
+  inboundPartialDate: any;
+  locationList: Location;
+  placeId = new FormControl('');
+  filteredPlaces: Observable<Places[]>;
+  placesEmptyList: Location[] = [];
 
-  constructor(private service:FlightService) { }
+  constructor(private service: FlightService) {}
 
-  ngOnInit(): void {
-  }
-  getFlight(){
+  ngOnInit(): void {}
+
+  getFlight() {
     var flight = {
-    country : this.country,
-    currency :this.currency,
-    locale:this.locale,
-    originPlace:this.originPlace,
-    destinationPlace:this.destinationPlace,
-    outboundPartialDate:this.outboundPartialDate,
-    inboundPartialDate:this.inboundPartialDate
-    }
+      country: this.country,
+      currency: this.currency,
+      locale: this.locale,
+      originPlace: this.originPlace,
+      destinationPlace: this.destinationPlace,
+      outboundPartialDate: this.outboundPartialDate,
+      inboundPartialDate: this.inboundPartialDate,
+    };
     this.service.getFlight(flight).subscribe();
   }
+
+  private _filterPlaces(value: string): any {
+    const filterValue = value.toLowerCase();
+    var location = {
+      country: this.country,
+      currency: this.currency,
+      locale: this.locale,
+      id: filterValue,
+    };
+    if (filterValue.length > 1) {
+      this.service.getLocations(location).subscribe((data) => {
+        this.locationList = data;
+
+        this.locationList.Places.filter((state: any) =>
+          state.PlaceName.toLowerCase().includes(filterValue)
+        );
+      });
+    } else {
+      return this.placesEmptyList;
+    }
+  }
+  getFilteredList(): any {
+    this.filteredPlaces = this.placeId.valueChanges.pipe(
+      startWith(''),
+      map((state) =>
+        state ? this._filterPlaces(state) : this.locationList?.Places?.slice()
+      )
+    );
+    return this.filteredPlaces;
+  }
+  searchFlight() {}
 }

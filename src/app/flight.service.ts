@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Location } from './location';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,7 @@ import { Observable } from 'rxjs';
 export class FlightService {
   readonly flightUrl =
     'https://partners.api.skyscanner.net/apiservices/browsequotes/v1.0';
+  readonly locationUrl = 'https://partners.api.skyscanner.net/apiservices/autosuggest/v1.0';
   readonly apiKey = 'prtl6749387986743898559646983194';
   constructor(private http: HttpClient) {}
 
@@ -17,10 +19,25 @@ export class FlightService {
         `${data.country}` +
         `${data.currency}` +
         `${data.locale}` +
-        `${data.originPlace}` + 
+        `${data.originPlace}` +
         `${data.destinationPlace}` +
         `${data.outboundPartialDate}` +
         `${data?.inboundPartialDate}`
+    );
+  }
+  getLocations(data: any) : Observable<Location> {
+    return this.http.get<Location>(
+      this.locationUrl +
+        '/' +
+        `${data.country}` +
+        '/' +
+        `${data.currency}` +
+        '/' +
+        `${data.locale}` +
+        '/?query=' +
+        `${data.id}` +
+        '&apiKey=' +
+        this.apiKey
     );
   }
 }
